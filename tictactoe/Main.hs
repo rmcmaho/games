@@ -3,7 +3,7 @@ import System.Console.ANSI
 import System.IO
 import Control.Monad.Trans
 
-import GameBoard
+import GameState
 
 prompt = do
         c <- getInputChar ""
@@ -21,8 +21,8 @@ loop = do
     result <- prompt
     if result then loop else return ()
 
-setupBoard = outputStr $ show initialBoard
-    
+setupBoard = outputStr $ renderBoard initialState
+
 main = do
     runInputT defaultSettings setupBoard
     runInputT defaultSettings loop

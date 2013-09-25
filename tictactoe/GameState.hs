@@ -1,19 +1,23 @@
 module GameState
 ( initialState
+, renderBoard
 ) where
 
 import GameBoard
 
 type XPosition = Int
 type YPosition = Int
-type CursorPosition = (XPosition,YPosition)
+data CursorPosition = CursorPosition XPosition YPosition
 
 data GameState = GameState { board :: GameBoard
                            , cursor :: CursorPosition
                            }
 
 initialCursor :: CursorPosition
-initialCursor = (0,0)
+initialCursor = CursorPosition 0 0
 
 initialState :: GameState
-initialState = GameState { board = initialBoard, cursor = initialCursor }
+initialState = GameState initialBoard initialCursor
+
+renderBoard :: GameState -> String
+renderBoard gameState = show $ board gameState
