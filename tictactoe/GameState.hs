@@ -1,8 +1,14 @@
 module GameState
-( initialState
+( GameState
+, initialState
 , renderBoard
+, setCursor
+, resetCursor
+, moveCursorUp
+, moveCursorDown
 ) where
 
+import System.Console.ANSI
 import GameBoard
 
 type XPosition = Int
@@ -14,10 +20,18 @@ data GameState = GameState { board :: GameBoard
                            }
 
 initialCursor :: CursorPosition
-initialCursor = CursorPosition 0 0
+initialCursor = CursorPosition 0 1
 
 initialState :: GameState
 initialState = GameState initialBoard initialCursor
 
 renderBoard :: GameState -> String
 renderBoard gameState = show $ board gameState
+
+resetCursor (GameState _ (CursorPosition x y)) = cursorUpLine (8 - y)
+
+setCursor (GameState _ (CursorPosition x y)) = cursorUpLine y
+
+moveCursorUp (GameState board (CursorPosition x y)) = GameState board (CursorPosition x (y+2))
+
+moveCursorDown (GameState board (CursorPosition x y)) = GameState board (CursorPosition x (y-2))

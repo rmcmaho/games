@@ -1,28 +1,29 @@
 import System.Console.Haskeline
-import System.Console.ANSI
 import System.IO
 import Control.Monad.Trans
 
 import GameState
 
-prompt = do
-        c <- getInputChar ""
-        case c of
-            Just 'q' -> return False
-            Just 'w' -> do
-                        liftIO $ cursorUpLine 2
-                        prompt
-            Just 's' -> do
-                        liftIO $ cursorDownLine 1
-                        prompt
-            _ -> return False
+changeStateOnInput :: GameState -> Maybe Char -> Maybe GameState
+changeStateOnInput gameState input =
+        case input of
+            Just 'q' -> Nothing
+            Just 'w' -> Just $ moveCursorUp gameState
+            Just 's' -> Just $ moveCursorDown gameState
+            _ -> Nothing
 
-loop = do
-    result <- prompt
-    if result then loop else return ()
-
-setupBoard = outputStr $ renderBoard initialState
+loop gameState = 
+    let newState input = changeStateOnInput gameState input
+    in
+    do
+    liftIO $ resetCursor gameState
+    outputStr $ renderBoard gameState
+    liftIO $ setCursor gameState
+    input <- getInputChar ""
+    case (newState input) of
+        Nothing -> return ()
+        Just state -> loop state
 
 main = do
-    runInputT defaultSettings setupBoard
-    runInputT defaultSettings loop
+    runInputT defaultSettings (outputStr $ renderBoard initialState)
+    runInputT defaultSettings (loop initialState)
