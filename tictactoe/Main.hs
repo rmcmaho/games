@@ -21,7 +21,7 @@ loop = do
     result <- prompt
     if result then loop else return ()
 
-setupBoard = outputStr $ renderGameBoard initialBoard
+setupBoard = outputStr $ show initialBoard
     
 main = do
     runInputT defaultSettings setupBoard
