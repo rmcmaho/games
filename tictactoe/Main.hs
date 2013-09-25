@@ -12,17 +12,19 @@ instance Show BoardPosition where
     show PlayerTwo = "O"
     show Empty = "."
 
-drawGameRow (pos1,pos2,pos3) = outputStrLn (show pos1 ++ show pos2 ++ show pos3)
+renderGameRow :: BoardRow -> String
+renderGameRow (pos1,pos2,pos3) = show pos1 ++ show pos2 ++ show pos3 ++ "\n"
 
-drawRowSeperator = outputStrLn "- - -"
+renderRowSeperator :: String
+renderRowSeperator = "- - -\n"
 
-drawGameBoard :: GameBoard -> InputT IO ()
-drawGameBoard (row1, row2, row3) = do
-    drawGameRow row1
-    drawRowSeperator
-    drawGameRow row2
-    drawRowSeperator
-    drawGameRow row3
+renderGameBoard :: GameBoard -> String
+renderGameBoard (row1, row2, row3) =
+    renderGameRow row1 ++
+    renderRowSeperator ++
+    renderGameRow row2 ++
+    renderRowSeperator ++
+    renderGameRow row3
 
 type XPosition = Int
 type YPosition = Int
