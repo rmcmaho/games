@@ -13,7 +13,7 @@ instance Show BoardPosition where
     show Empty = "."
 
 renderGameRow :: BoardRow -> String
-renderGameRow (pos1,pos2,pos3) = show pos1 ++ show pos2 ++ show pos3 ++ "\n"
+renderGameRow (pos1,pos2,pos3) = show pos1 ++ "|" ++ show pos2 ++ "|" ++ show pos3 ++ "\n"
 
 renderRowSeperator :: String
 renderRowSeperator = "- - -\n"
@@ -25,6 +25,15 @@ renderGameBoard (row1, row2, row3) =
     renderGameRow row2 ++
     renderRowSeperator ++
     renderGameRow row3
+
+initialRow :: BoardRow
+initialRow = (Empty,Empty,Empty)
+
+initialBoard :: GameBoard
+initialBoard = ( initialRow
+               , initialRow
+               , initialRow
+               )
 
 type XPosition = Int
 type YPosition = Int
@@ -49,16 +58,8 @@ prompt = do
 loop = do
     result <- prompt
     if result then loop else return ()
-
-printRow = outputStrLn ".|.|."
-printSeparator = outputStrLn "- - -"
     
-setupBoard = do
-    printRow
-    printSeparator
-    printRow
-    printSeparator
-    printRow
+setupBoard = outputStr $ renderGameBoard initialBoard
     
 main = do
     runInputT defaultSettings setupBoard
