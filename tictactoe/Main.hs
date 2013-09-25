@@ -3,6 +3,34 @@ import System.Console.ANSI
 import System.IO
 import Control.Monad.Trans
 
+data BoardPosition = PlayerOne | PlayerTwo | Empty
+type BoardRow = (BoardPosition,BoardPosition,BoardPosition)
+type GameBoard = (BoardRow,BoardRow,BoardRow)
+
+instance Show BoardPosition where
+    show PlayerOne = "X"
+    show PlayerTwo = "O"
+    show Empty = "."
+
+drawGameRow (pos1,pos2,pos3) = outputStrLn (show pos1 ++ show pos2 ++ show pos3)
+
+drawRowSeperator = outputStrLn "- - -"
+
+drawGameBoard :: GameBoard -> InputT IO ()
+drawGameBoard (row1, row2, row3) = do
+    drawGameRow row1
+    drawRowSeperator
+    drawGameRow row2
+    drawRowSeperator
+    drawGameRow row3
+
+type XPosition = Int
+type YPosition = Int
+type CursorPosition = (XPosition,YPosition)
+
+data GameState = GameState { board :: GameBoard
+                           , cursor :: CursorPosition
+                           }
 
 prompt = do
         c <- getInputChar ""
