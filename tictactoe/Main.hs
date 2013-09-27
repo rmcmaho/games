@@ -16,14 +16,13 @@ loop gameState =
     let newState input = changeStateOnInput gameState input
     in
     do
-    liftIO $ resetCursor gameState
     outputStr $ renderBoard gameState
     liftIO $ setCursor gameState
     input <- getInputChar ""
+    liftIO $ resetCursor gameState
     case (newState input) of
         Nothing -> return ()
         Just state -> loop state
 
 main = do
-    runInputT defaultSettings (outputStr $ renderBoard initialState)
     runInputT defaultSettings (loop initialState)
